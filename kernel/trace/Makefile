@@ -1,3 +1,4 @@
+CFLAGS_ring_buffer.o := -fno-strict-aliasing
 
 # We are fully aware of the dangers of __builtin_return_address()
 FRAME_CFLAGS := $(call cc-disable-warning,frame-address)

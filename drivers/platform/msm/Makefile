@@ -1,6 +1,8 @@
 #
 # Makefile for the MSM specific device drivers.
 #
+CFLAGS_KERNEL := -fno-strict-aliasing
+
 obj-$(CONFIG_QPNP_REVID) += qpnp-revid.o
 obj-$(CONFIG_QPNP_COINCELL) += qpnp-coincell.o
 obj-$(CONFIG_MSM_MHI) += mhi/
