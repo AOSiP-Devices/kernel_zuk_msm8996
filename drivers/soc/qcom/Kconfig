@@ -349,6 +349,16 @@ config MINIDUMP_MAX_ENTRIES
 	  This defines maximum number of entries to be allocated for application
 	  subsytem in Minidump table.
 
+config MSM_L2_IA_DEBUG
+     bool "Enable MSM L2 Indirect Access Debug"
+     depends on DEBUG_FS
+     default n
+     help
+      This option enables L2 indirect access debug
+      capability. It exposes L2 indirect access
+      debugfs interface to get/set data, address,
+      and target cpus.
+
 config MSM_RPM_SMD
 	bool "RPM driver using SMD protocol"
 	help
