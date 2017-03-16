@@ -59,6 +59,9 @@ struct gpio_keys_drvdata {
 	struct gpio_button_data data[0];
 };
 
+/*
+ * From drivers/misc/fpc1020_ree.c
+ */
 extern bool reset_gpio(void);
 
 /*
@@ -359,6 +362,11 @@ static struct attribute_group gpio_keys_attr_group = {
 	.attrs = gpio_keys_attrs,
 };
 
+/*
+ * Status of home button.
+ * true: pressed
+ * false: not pressed
+ */
 bool home_button_status;
 
 static void gpio_keys_gpio_report_event(struct gpio_button_data *bdata)
@@ -389,10 +397,23 @@ static void gpio_keys_gpio_report_event(struct gpio_button_data *bdata)
 	input_sync(input);
 }
 
-void reset_home_button(int i)
+/*
+ * Used by drivers/misc/fpc1020_ree.c
+ * Resets home button status.
+ */
+void reset_home_button(void)
 {
-	home_button_status = i;
-	pr_info("key home button reset ok, home_button_status=%d",i);
+	home_button_status = false;
+	pr_info("key home button reset ok, home_button_status=%d", home_button_status);
+}
+
+/*
+ * Used by drivers/misc/fpc1020_ree.c
+ * Returns a bool specifying whether home button is pressed.
+ */
+bool home_button_pressed(void)
+{
+	return home_button_status;
 }
 
 
@@ -1000,11 +1021,6 @@ static int __init gpio_keys_init(void)
 static void __exit gpio_keys_exit(void)
 {
 	platform_driver_unregister(&gpio_keys_device_driver);
-}
-
-bool home_button_pressed(void)
-{
-	return home_button_status;
 }
 
 late_initcall(gpio_keys_init);
