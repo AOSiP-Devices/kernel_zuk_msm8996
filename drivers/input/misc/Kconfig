@@ -851,3 +851,5 @@ config HALL_SWITCH
 	 If you say yes here, you get support for hall sensor
 
 endif
+
+source "drivers/input/misc/vibrator/Kconfig"
