@@ -1,3 +1,7 @@
+# ZUK MSM8996
+dtb-$(CONFIG_MACH_ZUK_Z2_PLUS) += msm8996-v3-pmi8996-mtp-z2_plus.dtb
+dtb-$(CONFIG_MACH_ZUK_Z2_ROW) += msm8996-v3-pmi8996-mtp-z2_row.dtb
+
 #dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb msm8916-mtp.dtb
 #dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-mtp.dtb
 #dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
