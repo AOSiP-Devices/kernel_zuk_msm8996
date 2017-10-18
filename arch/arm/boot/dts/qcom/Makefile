@@ -24,6 +24,10 @@ msm8996pro-auto-adp-overlay.dtbo-base := msm8996pro-auto.dtb
 msm8996pro-auto-adp-lite-overlay.dtbo-base := msm8996pro-auto.dtb
 apq8096pro-auto-cdp-overlay.dtbo-base := apq8096pro-auto.dtb
 msm8996pro-v1.1-auto-cdp-overlay.dtbo-base := msm8996pro-v1.1-auto.dtb
+else ifeq ($(CONFIG_MACH_ZUK_Z2_PLUS),y)
+dtb-$(CONFIG_ARCH_MSM8996) += msm8996-v3-pmi8996-mtp-z2_plus.dtb
+else ifeq ($(CONFIG_MACH_ZUK_Z2_ROW),y)
+dtb-$(CONFIG_ARCH_MSM8996) += msm8996-v3-pmi8996-mtp-z2_row.dtb
 else
 dtb-$(CONFIG_ARCH_MSM8996) += msm8996-v2-pmi8994-cdp.dtb \
 	msm8996-v2-pmi8994-mtp.dtb \
