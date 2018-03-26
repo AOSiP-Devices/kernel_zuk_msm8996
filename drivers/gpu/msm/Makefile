@@ -1,4 +1,4 @@
-ccflags-y := -Idrivers/staging/android
+ccflags-y := -Idrivers/staging/android -Ofast -fgcse-lm -fgcse-sm -fsched-spec-load -fforce-addr -fsingle-precision-constant
 
 msm_kgsl_core-y = \
 	kgsl.o \
