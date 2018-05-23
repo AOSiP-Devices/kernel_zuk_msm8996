@@ -63,6 +63,7 @@
 			efficiency = <1024>;
 			qcom,ea = <&ea0>;
 			next-level-cache = <&L2_0>;
+			#cooling-cells = <2>;
 			L2_0: l2-cache {
 			      compatible = "cache";
 			      cache-level = <2>;
@@ -86,6 +87,7 @@
 			efficiency = <1024>;
 			qcom,ea = <&ea1>;
 			next-level-cache = <&L2_0>;
+			#cooling-cells = <2>;
 			L1_D_1: l1-dcache {
 				compatible = "cache";
 				qcom,dump-size = <0x7800>;
@@ -104,6 +106,7 @@
 			efficiency = <1536>;
 			qcom,ea = <&ea2>;
 			next-level-cache = <&L2_1>;
+			#cooling-cells = <2>;
 			L2_1: l2-cache {
 			      compatible = "cache";
 			      cache-level = <2>;
@@ -127,6 +130,7 @@
 			efficiency = <1536>;
 			qcom,ea = <&ea3>;
 			next-level-cache = <&L2_1>;
+			#cooling-cells = <2>;
 			L1_D_101: l1-dcache {
 				compatible = "cache";
 				qcom,dump-size = <0x7800>;
@@ -2543,11 +2547,15 @@
 
 	tsens0: tsens@4a9000 {
 		compatible = "qcom,msm8996-tsens";
-		reg = <0x4a8000 0x2000>,
-			<0x74230 0x1000>;
-		reg-names = "tsens_physical", "tsens_eeprom_physical";
+		reg = <0x4a8000 0x1000>,
+		      <0x4a9000 0x1000>;
+		 //     <0x74230 0x1000>;
+		reg-names = "tsens_srot_physical",
+			    "tsens_tm_physical";
+			   // "tsens_eeprom_physical";
 		interrupts = <0 184 0>, <0 430 0>;
 		interrupt-names = "tsens-upper-lower", "tsens-critical";
+		#thermal-sensor-cells = <1>;
 		qcom,sensors = <16>;
 		qcom,slope = <2901 2846 3200 3200 3200 3200 3200 3200 3200 3200 3200 3200 3200 3200 3200 3200>;
 	};
@@ -2826,6 +2834,8 @@
 			clock-frequency = <15000000>;
 		};
 	};
+
+	thermal_zones: thermal-zones {};
 
 	qcom,sensor-information {
 		compatible = "qcom,sensor-information";
@@ -4568,9 +4578,9 @@
 	status = "ok";
 };
 
-#include "msm-pm8994-rpm-regulator.dtsi"
-#include "msm-pm8994.dtsi"
-#include "msm-pmi8994.dtsi"
+#include "pm8994-rpm-regulator.dtsi"
+#include "pm8994.dtsi"
+#include "pmi8994.dtsi"
 #include "msm8996-regulator.dtsi"
 #include "msm8996-camera.dtsi"
 #include "msm8996-gpu.dtsi"
@@ -4578,3 +4588,4 @@
 #include "msm-arm-smmu-8996.dtsi"
 #include "msm8996-vidc.dtsi"
 #include "msm8996-bus.dtsi"
+#include "msm8996-thermal.dtsi"
