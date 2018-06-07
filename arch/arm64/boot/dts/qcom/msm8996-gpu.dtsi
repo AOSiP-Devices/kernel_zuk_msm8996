@@ -17,6 +17,14 @@
 		qcom,pas-id = <13>;
 		qcom,firmware-name = "a530_zap";
 		memory-region = <&peripheral_mem>;
+		clock-names = "scm_core_clk", "scm_iface_clk",
+				"scm_bus_clk", "aggre2";
+		qcom,proxy-clock-names = "scm_core_clk", "scm_iface_clk",
+				"scm_bus_clk", "aggre2";
+		clocks = <&clock_gcc clk_ce1_clk>,
+			 <&clock_gcc clk_qseecom_ce1_clk>,
+			 <&clock_gcc clk_scm_ce1_clk>,
+			 <&clock_gcc clk_aggre2_noc_clk>;
 	};
 
 	msm_bus: qcom,kgsl-busmon{
