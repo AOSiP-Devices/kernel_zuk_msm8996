@@ -13,6 +13,8 @@
 #include "skeleton64.dtsi"
 #include <dt-bindings/clock/msm-clocks-8996.h>
 #include <dt-bindings/interrupt-controller/arm-gic.h>
+#include <dt-bindings/spmi/spmi.h>
+#include <dt-bindings/regulator/qcom,rpm-smd-regulator.h>
 
 / {
 	model = "Qualcomm Technologies, Inc. MSM 8996";
