@@ -217,7 +217,9 @@ int malloc_lcd_effect_code_buf(struct panel_effect_data *panel_data)
 	struct lcd_cmds *save_cmd = &panel_data->save_cmd;
 	if (panel_data->buf == NULL) {
 		panel_data->buf_size = get_init_code_max_cnt(panel_data, save_cmd);
-		panel_data->buf  = kmalloc(sizeof(struct dsi_cmd_desc) * panel_data->buf_size, GFP_KERNEL);
+		panel_data->buf  = kmalloc_array(panel_data->buf_size,
+						 sizeof(struct dsi_cmd_desc),
+						 GFP_KERNEL);
 		if ( !panel_data->buf)
 			return -ENOMEM;
 		return 0;
