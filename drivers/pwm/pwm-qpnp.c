@@ -1501,11 +1501,11 @@ int pwm_enable_synchronized(struct pwm_device **pwms, size_t num)
 		return -EINVAL;
 	}
 
-	flags = kzalloc(sizeof(unsigned long) * num, GFP_KERNEL);
+	flags = kcalloc(num, sizeof(unsigned long), GFP_KERNEL);
 	if (!flags)
 		return -ENOMEM;
 
-	chips = kzalloc(sizeof(struct qpnp_pwm_chip *) * num, GFP_KERNEL);
+	chips = kcalloc(num, sizeof(struct qpnp_pwm_chip *), GFP_KERNEL);
 	if (!chips) {
 		kfree(flags);
 		return -ENOMEM;
@@ -1901,7 +1901,7 @@ static int qpnp_parse_lpg_dt_config(struct device_node *of_lpg_node,
 		return -EINVAL;
 	}
 
-	duty_pct_list = kzalloc(sizeof(u32) * list_size, GFP_KERNEL);
+	duty_pct_list = kcalloc(list_size, sizeof(u32), GFP_KERNEL);
 
 	if (!duty_pct_list) {
 		pr_err("kzalloc failed on duty_pct_list\n");
@@ -2104,8 +2104,9 @@ static int qpnp_parse_dt_config(struct spmi_device *spmi,
 			lut_entry_size = sizeof(u8);
 		}
 
-		lut_config->duty_pct_list = kzalloc(lpg_config->lut_size *
-					lut_entry_size, GFP_KERNEL);
+		lut_config->duty_pct_list = kcalloc(lpg_config->lut_size,
+						    lut_entry_size,
+						    GFP_KERNEL);
 		if (!lut_config->duty_pct_list) {
 			pr_err("can not allocate duty pct list\n");
 			return -ENOMEM;

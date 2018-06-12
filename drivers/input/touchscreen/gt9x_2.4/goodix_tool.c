@@ -223,7 +223,7 @@ s32 init_wr_node(struct i2c_client *client)
 	i = 5;
 	while ((!cmd_head.data) && i)
 	{
-		cmd_head.data = kzalloc(i * DATA_LENGTH_UINT, GFP_KERNEL);
+		cmd_head.data = kcalloc(DATA_LENGTH_UINT, i, GFP_KERNEL);
 		if (NULL != cmd_head.data)
 		{
 			break;
