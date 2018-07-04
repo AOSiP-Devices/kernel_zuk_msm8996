@@ -2356,6 +2356,7 @@
 		vdd_cx-supply = <&pm8994_s1_corner>;
 		qcom,proxy-reg-names = "vdd_cx";
 		qcom,vdd_cx-uV-uA = <7 100000>;
+		qcom,mas-crypto = <&mas_crypto_c0>;
 
 		clocks = <&clock_gcc clk_cxo_pil_lpass_clk>;
 		clock-names = "xo";
@@ -2386,6 +2387,7 @@
 
 		vdd-supply = <&gdsc_venus>;
 		qcom,proxy-reg-names = "vdd";
+		qcom,mas-crypto = <&mas_crypto_c0>;
 
 		clocks = <&clock_mmss clk_video_core_clk>,
 			<&clock_mmss clk_video_ahb_clk>,
@@ -2463,6 +2465,7 @@
 		qcom,vdd_cx-uV-uA = <5 0>;
 		qcom,proxy-reg-names = "vdd_cx", "vdd_px";
 		qcom,keep-proxy-regs-on;
+		qcom,mas-crypto = <&mas_crypto_c0>;
 
 		clocks = <&clock_gcc clk_cxo_pil_ssc_clk>,
 			 <&clock_gcc clk_aggre2_noc_clk>;
