@@ -8,6 +8,7 @@
 #include "common-sound.dtsi"
 #include "common-usb.dtsi"
 #include "common-vibration.dtsi"
+#include "common-thermal.dtsi"
 
 #include <dt-bindings/input/ti-drv260x.h>
 
