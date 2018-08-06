@@ -2562,8 +2562,7 @@ try_onemore:
 		int n = (i == META) ? 1: NR_TEMP_TYPE;
 		int j;
 
-		sbi->write_io[i] = kmalloc_array(n,
-								sizeof(struct f2fs_bio_info),
+		sbi->write_io[i] = kmalloc(n * sizeof(struct f2fs_bio_info),
 								GFP_KERNEL);
 		if (!sbi->write_io[i]) {
 			err = -ENOMEM;
