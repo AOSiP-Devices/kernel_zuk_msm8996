@@ -465,6 +465,7 @@ struct cal_block_data *cal_utils_get_cal_block_by_key(
 	return NULL;
 }
 
+#ifndef CONFIG_MACH_ZUK_MSM8996
 static int q6core_send_get_avcs_fwk_ver_cmd(void)
 {
 	struct apr_hdr avcs_ver_cmd;
@@ -624,6 +625,14 @@ done:
 	return ret;
 }
 EXPORT_SYMBOL(q6core_get_fwk_version_size);
+
+#else
+int q6core_get_service_version(uint32_t service_id,
+			       struct avcs_fwk_ver_info *ver_info,
+			       size_t size) { return -1; }
+size_t q6core_get_fwk_version_size(uint32_t service_id)
+	{ return -1; }
+#endif
 
 /**
  * core_set_license -
