@@ -82,9 +82,9 @@ static ssize_t irq_set(struct device *device,
 	struct fpc1020_data *fpc1020 = dev_get_drvdata(device);
 
 	retval = kstrtou64(buffer, 0, &val);
-	if (val == 1)
+	if (val)
 		enable_irq(fpc1020->irq);
-	else if (val == 0)
+	else if (!val)
 		disable_irq(fpc1020->irq);
 	else
 		return -ENOENT;
@@ -151,7 +151,7 @@ static void fpc1020_report_work_func(struct work_struct *work)
 	struct fpc1020_data *fpc1020 = NULL;
 
 	fpc1020 = container_of(work, struct fpc1020_data, input_report_work);
-	if (fpc1020->screen_on == 1) {
+	if (fpc1020->screen_on) {
 		pr_info("Report key value = %d\n", (int)fpc1020->report_key);
 		input_report_key(fpc1020->input_dev, fpc1020->report_key, 1);
 		input_sync(fpc1020->input_dev);
@@ -212,7 +212,7 @@ static irqreturn_t fpc1020_irq_handler(int irq, void *_fpc1020)
 
 	pr_info("fpc1020 IRQ interrupt\n");
 	smp_rmb();
-	if (fpc1020->screen_on == 0) {
+	if (!fpc1020->screen_on) {
 		pm_wakeup_event(fpc1020->dev, 5000);
 	}
 	sysfs_notify(&fpc1020->dev->kobj, NULL, dev_attr_irq.attr.name);
