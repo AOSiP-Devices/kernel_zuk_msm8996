@@ -19,7 +19,11 @@
 struct i2c_mux_device {
 	struct platform_device *pdev;
 	struct v4l2_subdev subdev;
+	struct resource *ctl_mem;
+	struct resource *ctl_io;
 	void __iomem *ctl_base;
+	struct resource *rw_mem;
+	struct resource *rw_io;
 	void __iomem *rw_base;
 	struct mutex mutex;
 	unsigned use_count;
