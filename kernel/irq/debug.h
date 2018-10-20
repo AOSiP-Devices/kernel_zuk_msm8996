@@ -11,6 +11,7 @@
 
 static inline void print_irq_desc(unsigned int irq, struct irq_desc *desc)
 {
+#if 0
 	static DEFINE_RATELIMIT_STATE(ratelimit, 5 * HZ, 5);
 
 	if (!__ratelimit(&ratelimit))
@@ -43,6 +44,7 @@ static inline void print_irq_desc(unsigned int irq, struct irq_desc *desc)
 	___PD(IRQS_INPROGRESS);
 	___PD(IRQS_DISABLED);
 	___PD(IRQS_MASKED);
+#endif
 }
 
 #undef ___P
