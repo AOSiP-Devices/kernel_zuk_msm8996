@@ -19,9 +19,9 @@
 #include <linux/miscdevice.h>
 #include <linux/regulator/consumer.h>
 #include <linux/of_gpio.h>
-#include <linux/wakelock.h>
 #include <linux/pinctrl/consumer.h>
 #include <linux/pm_runtime.h>
+#include <linux/pm_wakeup.h>
 #include <linux/cclogic-core.h>
 #include <linux/notifier.h>
 #include <linux/export.h>
@@ -315,8 +315,7 @@ static irqreturn_t cclogic_irq(int irq, void *data)
 	if (!cclogic_dev || !cclogic_dev->i2c_client)
 		return IRQ_HANDLED;
 
-	if (!wake_lock_active(&cclogic_dev->wakelock))
-		wake_lock(&cclogic_dev->wakelock);
+	__pm_wakeup_event(&cclogic_dev->wakeup, msecs_to_jiffies(1000));
 	cancel_delayed_work(&cclogic_dev->work);
 	schedule_delayed_work(&cclogic_dev->work, 0);
 
@@ -332,10 +331,8 @@ static irqreturn_t cclogic_plug_irq(int irq, void *data)
 	if (!cclogic_dev || !cclogic_dev->i2c_client)
 		return IRQ_HANDLED;
 
-	if (!wake_lock_active(&cclogic_dev->wakelock_plug)) {
-		pm_runtime_get(cclogic_dev->dev);
-		wake_lock(&cclogic_dev->wakelock_plug);
-	}
+	pm_runtime_get(cclogic_dev->dev);
+	__pm_wakeup_event(&cclogic_dev->wakeup_plug, msecs_to_jiffies(1000));
 
 	m_plug_state = 1;
 
@@ -886,8 +883,7 @@ work_end:
 			pr_err("[%s][%d] still in error,more than %d retries\n", __func__, __LINE__, CCLOGIC_MAX_RETRIES);
 	}
 
-	if (wake_lock_active(&pdata->wakelock))
-		wake_unlock(&pdata->wakelock);
+	__pm_relax(&pdata->wakeup);
 	retries = 0;
 }
 
@@ -912,22 +908,17 @@ static void cclogic_do_plug_work(struct work_struct *w)
 				cclogic_vbus_power_on(pdata, false);
 				cclogic_func_set(p, CCLOGIC_FUNC_UART);
 				retries = 0;
-				if (wake_lock_active(&cclogic_priv->wakelock_plug)) {
-					pm_runtime_put(pdata->dev);
-					wake_unlock(&cclogic_priv->wakelock_plug);
-				}
+				pm_runtime_put(pdata->dev);
+				__pm_relax(&cclogic_priv->wakeup_plug);
 			}
 		} else{
 			retries = 0;
-			if (wake_lock_active(&cclogic_priv->wakelock_plug))
-				wake_unlock(&cclogic_priv->wakelock_plug);
+			__pm_relax(&cclogic_priv->wakeup_plug);
 		}
 	} else{
 		retries = 0;
-		if (wake_lock_active(&cclogic_priv->wakelock_plug)) {
-			pm_runtime_put(pdata->dev);
-			wake_unlock(&cclogic_priv->wakelock_plug);
-		}
+		pm_runtime_put(pdata->dev);
+		__pm_relax(&cclogic_priv->wakeup_plug);
 	}
 }
 
@@ -1167,7 +1158,7 @@ int cclogic_register(struct cclogic_chip *c)
 		return -ENODEV;
 
 	pm_runtime_get_sync(cclogic_priv->dev);
-	wake_lock(&cclogic_priv->wakelock_plug);
+	__pm_wakeup_event(&cclogic_priv->wakeup_plug, msecs_to_jiffies(1000));
 	msleep(100);
 
 	mutex_lock(&cclogic_ops_lock);
@@ -1234,8 +1225,7 @@ void cclogic_unregister(struct cclogic_chip *c)
 
 	cclogic_irq_enable(cclogic_priv, false);
 
-	if (wake_lock_active(&cclogic_priv->wakelock))
-		wake_unlock(&cclogic_priv->wakelock);
+	__pm_relax(&cclogic_priv->wakeup);
 	pm_runtime_put(cclogic_priv->dev);
 
 	mutex_lock(&cclogic_ops_lock);
@@ -1408,10 +1398,8 @@ static int cclogic_probe(struct i2c_client *client,
 	}
 
 
-	wake_lock_init(&cclogic_dev->wakelock, WAKE_LOCK_SUSPEND,
-				"cclogic_wakelock");
-	wake_lock_init(&cclogic_dev->wakelock_plug, WAKE_LOCK_SUSPEND,
-				"cclogic_wakelock_plug");
+	wakeup_source_init(&cclogic_dev->wakeup, "cclogic_wakeup");
+	wakeup_source_init(&cclogic_dev->wakeup_plug, "cclogic_wakeup_plug");
 
 	device_init_wakeup(cclogic_dev->dev, 1);
 
@@ -1468,8 +1456,8 @@ err_irq_req:
 	sysfs_remove_group(&client->dev.kobj, &cclogic_attr_group);
 err_chip_check:
 	device_init_wakeup(cclogic_dev->dev, 0);
-	wake_lock_destroy(&cclogic_dev->wakelock);
-	wake_lock_destroy(&cclogic_dev->wakelock_plug);
+	wakeup_source_trash(&cclogic_dev->wakeup);
+	wakeup_source_trash(&cclogic_dev->wakeup_plug);
 err_irq_plug_dir:
 	if (gpio_is_valid(platform_data->irq_plug))
 		gpio_free(platform_data->irq_plug);
@@ -1504,8 +1492,8 @@ static int cclogic_remove(struct i2c_client *client)
 	sysfs_remove_group(&client->dev.kobj, &cclogic_attr_group);
 
 	device_init_wakeup(cclogic_dev->dev, 0);
-	wake_lock_destroy(&cclogic_dev->wakelock);
-	wake_lock_destroy(&cclogic_dev->wakelock_plug);
+	wakeup_source_trash(&cclogic_dev->wakeup);
+	wakeup_source_trash(&cclogic_dev->wakeup_plug);
 
 	cancel_delayed_work_sync(&cclogic_dev->work);
 	cancel_delayed_work_sync(&cclogic_dev->plug_work);
