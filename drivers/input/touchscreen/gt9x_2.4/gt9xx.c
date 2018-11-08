@@ -2517,7 +2517,7 @@ static void __exit goodix_ts_exit(void)
 	}
 }
 
-module_init(goodix_ts_init);
+rootfs_initcall(goodix_ts_init);
 module_exit(goodix_ts_exit);
 
 MODULE_DESCRIPTION("GTP Series Driver");
