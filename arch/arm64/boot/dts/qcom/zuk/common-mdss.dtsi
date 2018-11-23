@@ -31,15 +31,3 @@
 &mdss_dsi {
 	hw-config = "single_dsi";
 };
-
-&dsi_dual_sharp_video {
-	qcom,cont-splash-disabled;
-};
-
-&dsi_dual_nt35597_video {
-	qcom,cont-splash-disabled;
-};
-
-&dsi_dual_nt35597_cmd {
-	qcom,cont-splash-enabled;
-};

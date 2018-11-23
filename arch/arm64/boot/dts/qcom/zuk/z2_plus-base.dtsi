@@ -95,7 +95,7 @@
 	};
 };
 
-&pmi8994_fg {
+&qpnp_fg {
 	qcom,fg-iterm-ma = <125>;
 };
 
@@ -111,7 +111,7 @@
 	qcom,qpnp-lab-init-lcd-voltage = <5000000>;
 };
 
-&pmi8994_charger {
+&qpnp_smbcharger {
 	qcom,fastchg-current-ma = <2000>;
 };
 

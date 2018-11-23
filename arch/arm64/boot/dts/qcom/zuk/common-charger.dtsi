@@ -1,4 +1,4 @@
-&pmi8994_charger {
+&qpnp_smbcharger {
 	qcom,battery-data = <&mtp_batterydata>;	
 	qcom,float-voltage-mv = <4400>;
 	qcom,thermal-mitigation = <1400 500 0>;
@@ -12,7 +12,7 @@
 	qcom,fastchg-current-comp = <1500>;
 };
 
-&pmi8994_fg {
+&qpnp_fg {
 	qcom,resume-soc = <99>;
 	qcom,fg-cc-cv-threshold-mv = <4390>;
 	qcom,thermal-coefficients = [b7 85 b2 49 71 35];  // NTC B: 4250
