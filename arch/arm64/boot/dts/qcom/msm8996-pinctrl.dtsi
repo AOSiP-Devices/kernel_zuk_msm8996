@@ -15,6 +15,7 @@
 		compatible = "qcom,msm8996-pinctrl";
 		reg = <0x01010000 0x300000>;
 		//interrupts = <0 208 0>;
+		reg-names = "pinctrl_regs";
 		interrupts-extended = <&wakegic GIC_SPI 208 IRQ_TYPE_NONE>;
 		gpio-controller;
 		#gpio-cells = <2>;
