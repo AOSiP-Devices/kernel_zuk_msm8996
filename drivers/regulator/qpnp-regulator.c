@@ -50,6 +50,8 @@ module_param_named(
 
 #define vreg_err(vreg, fmt, ...) \
 	pr_err("%s: " fmt, vreg->rdesc.name, ##__VA_ARGS__)
+#define vreg_debug(vreg, fmt, ...) \
+	pr_debug("%s: " fmt, vreg->rdesc.name, ##__VA_ARGS__)
 
 /* These types correspond to unique register layouts. */
 enum qpnp_regulator_logical_type {
@@ -1831,11 +1833,18 @@ static int qpnp_regulator_check_constraints(struct qpnp_regulator *vreg,
 
 	if (pdata->init_data.constraints.min_uV < limit_min_uV
 	    || pdata->init_data.constraints.max_uV >  limit_max_uV) {
+#ifndef CONFIG_ARCH_MSM8996
 		vreg_err(vreg, "regulator min/max(%d/%d) constraints do not fit within HW configured min/max(%d/%d) constraints\n",
 			pdata->init_data.constraints.min_uV,
 			pdata->init_data.constraints.max_uV,
 			limit_min_uV, limit_max_uV);
 		return -EINVAL;
+#else
+		vreg_debug(vreg, "regulator min/max(%d/%d) constraints do not fit within HW configured min/max(%d/%d) constraints\n",
+			pdata->init_data.constraints.min_uV,
+			pdata->init_data.constraints.max_uV,
+			limit_min_uV, limit_max_uV);
+#endif
 	}
 
 	return 0;
