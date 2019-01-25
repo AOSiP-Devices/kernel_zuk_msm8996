@@ -2091,9 +2091,6 @@ static void goodix_ts_resume(struct goodix_ts_data *ts)
 	{
 		GTP_ERROR("GTP later resume failed.");
 	}
-	{
-		gtp_send_cfg(ts->client);
-	}
 
 	if (ts->use_irq)
 	{
