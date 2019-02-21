@@ -497,6 +497,9 @@ static int variable_rate_pll_clk_enable_hwfsm(struct clk *c)
 	u32 lockmask = pll->masks.lock_mask ?: PLL_LOCKED_BIT;
 	unsigned long flags;
 	u32 regval;
+	u32 mode = readl_relaxed(PLL_MODE_REG(pll));
+	u32 status_reg, user_reg, l_reg, m_reg, n_reg, config_reg;
+	u64 time;
 
 	spin_lock_irqsave(&pll_reg_lock, flags);
 
@@ -507,8 +510,10 @@ static int variable_rate_pll_clk_enable_hwfsm(struct clk *c)
 		writel_relaxed(regval, PLL_TEST_CTL_LO_REG(pll));
 	}
 
-	/* Wait for 50us explicitly to avoid transient locks */
-	udelay(50);
+	/* Wait for 100us explicitly to avoid transient locks */
+	udelay(100);
+
+	time = sched_clock();
 
 	for (count = ENABLE_WAIT_MAX_LOOPS; count > 0; count--) {
 		if (readl_relaxed(PLL_STATUS_REG(pll)) & lockmask)
@@ -516,8 +521,26 @@ static int variable_rate_pll_clk_enable_hwfsm(struct clk *c)
 		udelay(1);
 	}
 
-	if (!(readl_relaxed(PLL_STATUS_REG(pll)) & lockmask))
+	time = sched_clock() - time;
+
+	if (!(readl_relaxed(PLL_STATUS_REG(pll)) & lockmask)) {
+		mode = readl_relaxed(PLL_MODE_REG(pll));
+		status_reg = readl_relaxed(PLL_STATUS_REG(pll));
+		user_reg = readl_relaxed(PLL_CONFIG_REG(pll));
+		config_reg = readl_relaxed(PLL_CFG_CTL_REG(pll));
+		l_reg = readl_relaxed(PLL_L_REG(pll));
+		m_reg = readl_relaxed(PLL_M_REG(pll));
+		n_reg = readl_relaxed(PLL_N_REG(pll));
+		pr_err("count = %d\n", (int)count);
+		pr_err("mode register is 0x%x\n", mode);
+		pr_err("status register is 0x%x\n", status_reg);
+		pr_err("user control register is 0x%x\n", user_reg);
+		pr_err("config control register is 0x%x\n", config_reg);
+		pr_err("L value register is 0x%x\n", l_reg);
+		pr_err("M value register is 0x%x\n", m_reg);
+		pr_err("N value control register is 0x%x\n", n_reg);
 		pr_err("PLL %s didn't lock after enabling it!\n", c->dbg_name);
+	}
 
 	spin_unlock_irqrestore(&pll_reg_lock, flags);
 
