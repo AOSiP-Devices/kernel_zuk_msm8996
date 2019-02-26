@@ -155,7 +155,6 @@
 						qcom,ss-power = <198>;
 						qcom,energy-overhead = <21850>;
 						qcom,time-overhead = <120>;
-						qcom,use-broadcast-timer;
 						qcom,hyp-psci;
 					};
 
@@ -250,7 +249,6 @@
 						qcom,ss-power = <198>;
 						qcom,energy-overhead = <21850>;
 						qcom,time-overhead = <120>;
-						qcom,use-broadcast-timer;
 						qcom,hyp-psci;
 					};
 
