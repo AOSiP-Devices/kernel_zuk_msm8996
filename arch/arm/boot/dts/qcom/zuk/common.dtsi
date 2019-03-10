@@ -339,3 +339,22 @@
 &uartblsp2dm1 {
  	status = "disabled";
 };
+
+&vendor {
+	fsmgr_flags = "wait";
+};
+
+&firmware {
+	android {
+		/delete-node/ vbmeta;
+		fstab {
+			system {
+				compatible = "android,system";
+				type = "ext4";
+				mnt_flags = "ro,barrier=1,discard";
+				fsmgr_flags = "wait";
+				status = "ok";
+			};
+		};
+	};
+};

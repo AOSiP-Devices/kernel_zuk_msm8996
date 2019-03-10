@@ -240,12 +240,13 @@
 	qcom,ilim-ma = <85>;	
 };
 
+&vendor {
+	dev = "/dev/block/platform/soc/624000.ufshc/by-name/factory";
+};
+
 &firmware {
 	android {
 		fstab {
-			vendor {
-				dev = "/dev/block/platform/soc/624000.ufshc/by-name/factory";
-			};
 			system {
 				dev = "/dev/block/platform/soc/624000.ufshc/by-name/system";
 			};
