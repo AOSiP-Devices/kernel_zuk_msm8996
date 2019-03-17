@@ -58,8 +58,6 @@ struct fpc1020_data {
 extern bool home_button_pressed(void);
 extern void reset_home_button(void);
 
-bool reset;
-
 static int fb_notifier_callback(struct notifier_block *self,
 		unsigned long event, void *data);
 
