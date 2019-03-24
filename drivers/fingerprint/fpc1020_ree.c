@@ -50,6 +50,7 @@ struct fpc1020_data {
 	struct work_struct pm_work;
 	struct work_struct input_report_work;
 	struct workqueue_struct *fpc1020_wq;
+	struct task_struct *fingerprintd;
 	u8  report_key;
 	int screen_on;
 };
@@ -300,15 +301,21 @@ static int fpc1020_alloc_input_dev(struct fpc1020_data *fpc1020)
 	return retval;
 }
 
-static void set_fingerprintd_nice(int nice)
+static void set_fingerprintd_nice(struct fpc1020_data *fpc1020, int nice)
 {
 	struct task_struct *p;
+
+	if (fpc1020->fingerprintd) {
+		set_user_nice(fpc1020->fingerprintd, nice);
+		return;
+	}
 
 	read_lock(&tasklist_lock);
 	for_each_process(p) {
 		if (!memcmp(p->comm, "fingerprint@2.1", 16)) {
+			fpc1020->fingerprintd = p;
 			pr_debug("fingerprint nice changed to %i\n", nice);
-			set_user_nice(p, nice);
+			set_user_nice(fpc1020->fingerprintd, nice);
 			break;
 		}
 	}
@@ -323,12 +330,12 @@ static void fpc1020_suspend_resume(struct work_struct *work)
 	/* Escalate fingerprintd priority when screen is off */
 	if (fpc1020->screen_on) {
 		/* Restore fingerprintd priority to defaults */
-		set_fingerprintd_nice(0);
+		set_fingerprintd_nice(fpc1020, 0);
 	} else {
 		/* Elevate fingerprintd priority when screen is off to ensure
 		* the fingerprint sensor is responsive and that the haptic
 		* response on successful verification always fires */
-		set_fingerprintd_nice(-1);
+		set_fingerprintd_nice(fpc1020, -1);
 	}
 }
 
