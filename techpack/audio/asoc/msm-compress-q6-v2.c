@@ -42,6 +42,7 @@
 #include <dsp/apr_audio-v2.h>
 #include <dsp/q6asm-v2.h>
 #include <dsp/msm-audio-effects-q6-v2.h>
+#include <dsp/q6core.h>
 #include "msm-pcm-routing-v2.h"
 #include "msm-qti-pp-config.h"
 
@@ -1013,7 +1014,17 @@ static int msm_compr_send_media_format_block(struct snd_compr_stream *cstream,
 			sample_word_size = 16;
 			break;
 		}
-		ret = q6asm_media_format_block_pcm_format_support_v4(
+		if (q6core_get_avs_version() == Q6_SUBSYS_AVS2_7)
+			ret = q6asm_media_format_block_pcm_format_support_v3(
+							prtd->audio_client,
+							prtd->sample_rate,
+							prtd->num_channels,
+							bit_width, stream_id,
+							use_default_chmap,
+							chmap,
+							sample_word_size);
+		else
+			ret = q6asm_media_format_block_pcm_format_support_v4(
 							prtd->audio_client,
 							prtd->sample_rate,
 							prtd->num_channels,
@@ -1337,7 +1348,13 @@ static int msm_compr_configure_dsp_for_playback
 	} else {
 		pr_debug("%s: stream_id %d bits_per_sample %d\n",
 				__func__, ac->stream_id, bits_per_sample);
-		ret = q6asm_stream_open_write_v4(ac,
+		if (q6core_get_avs_version() == Q6_SUBSYS_AVS2_7)
+			ret = q6asm_stream_open_write_v3(ac,
+				prtd->codec, bits_per_sample,
+				ac->stream_id,
+				prtd->gapless_state.use_dsp_gapless_mode);
+		else
+			ret = q6asm_stream_open_write_v4(ac,
 				prtd->codec, bits_per_sample,
 				ac->stream_id,
 				prtd->gapless_state.use_dsp_gapless_mode);
@@ -2569,7 +2586,13 @@ static int msm_compr_trigger(struct snd_compr_stream *cstream, int cmd)
 
 		pr_debug("%s: open_write stream_id %d bits_per_sample %d",
 				__func__, stream_id, bits_per_sample);
-		rc = q6asm_stream_open_write_v4(prtd->audio_client,
+		if (q6core_get_avs_version() == Q6_SUBSYS_AVS2_7)
+			rc = q6asm_stream_open_write_v3(prtd->audio_client,
+				prtd->codec, bits_per_sample,
+				stream_id,
+				prtd->gapless_state.use_dsp_gapless_mode);
+		else
+			rc = q6asm_stream_open_write_v4(prtd->audio_client,
 				prtd->codec, bits_per_sample,
 				stream_id,
 				prtd->gapless_state.use_dsp_gapless_mode);
