@@ -340,7 +340,7 @@
  	status = "disabled";
 };
 
-&vendor {
+&android_vendor {
 	fsmgr_flags = "wait";
 };
 

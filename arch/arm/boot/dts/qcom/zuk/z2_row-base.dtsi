@@ -240,7 +240,7 @@
 	qcom,ilim-ma = <85>;	
 };
 
-&vendor {
+&android_vendor {
 	dev = "/dev/block/platform/soc/624000.ufshc/by-name/factory";
 };
 

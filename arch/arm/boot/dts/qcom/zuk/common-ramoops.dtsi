@@ -1,9 +1,7 @@
-/ {
-	reserved-memory {
-		ramoops_mem: ramoops_mem@ac000000 {
-			reg = <0 0x9ff00000 0 0x00100000>;
-			label = "ramoops_mem";
-		};
+&reserved_memory {
+	ramoops_mem: ramoops_mem@ac000000 {
+		reg = <0 0x9ff00000 0 0x00100000>;
+		label = "ramoops_mem";
 	};
 };
 

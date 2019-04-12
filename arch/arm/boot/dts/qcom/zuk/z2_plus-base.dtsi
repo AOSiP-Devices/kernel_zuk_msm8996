@@ -128,7 +128,7 @@
 	qcom,spkr-sd-n-gpio = <&pmi8994_gpios 3 0>;
 };
 
-&vendor {
+&android_vendor {
 	dev = "/dev/block/platform/soc/7464900.sdhci/by-name/factory";
 };
 
