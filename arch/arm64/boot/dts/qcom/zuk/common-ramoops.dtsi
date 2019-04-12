@@ -1,10 +1,8 @@
-/ {
-	reserved-memory {
-		ramoops_mem: ramoops_mem_region {
-			no-map;
-			reg = <0 0x9ff00000 0 0x00100000>;
-			label = "ramoops_mem";
-		};
+&reserved_memory {
+	ramoops_mem: ramoops_mem_region {
+		no-map;
+		reg = <0 0x9ff00000 0 0x00100000>;
+		label = "ramoops_mem";
 	};
 };
 
