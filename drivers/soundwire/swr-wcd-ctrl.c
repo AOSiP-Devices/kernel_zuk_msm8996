@@ -1319,7 +1319,7 @@ static int swrm_get_logical_dev_num(struct swr_master *mstr, u64 dev_id,
 			goto found;
 		}
 	}
-	dev_err(swrm->dev, "%s: device id 0x%llx does not match with 0x%llx\n",
+	dev_dbg(swrm->dev, "%s: device id 0x%llx does not match with 0x%llx\n",
 		__func__, id, dev_id);
 found:
 	pm_runtime_mark_last_busy(&swrm->pdev->dev);

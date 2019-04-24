@@ -100,7 +100,7 @@ temp_retry:
 
 	if (temp_val <= LOW_TEMP_THRESHOLD ||
 		temp_val >= HIGH_TEMP_THRESHOLD) {
-		printk_ratelimited("%s: T0: %d is out of range[%d, %d]\n",
+		pr_debug_ratelimited("%s: T0: %d is out of range[%d, %d]\n",
 				   __func__, temp_val, LOW_TEMP_THRESHOLD,
 				   HIGH_TEMP_THRESHOLD);
 		if (retry--) {

@@ -6642,7 +6642,7 @@ static int afe_get_cal_hw_delay(int32_t path,
 		}
 	}
 	if (i == hw_delay_info->num_entries) {
-		pr_err("%s: Unable to find delay for sample rate %d\n",
+		pr_debug("%s: Unable to find delay for sample rate %d\n",
 		       __func__, entry->sample_rate);
 		ret = -EFAULT;
 		goto unlock;
