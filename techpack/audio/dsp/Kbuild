@@ -100,11 +100,15 @@ ADSP_LOADER_OBJS += adsp-loader.o
 endif
 
 ifdef CONFIG_MSM_QDSP6_NOTIFIER
-QDSP6_NOTIFIER_OBJS += audio_notifier.o audio_ssr.o
+QDSP6_NOTIFIER_OBJS += audio_notifier.o
 endif
 
 ifdef CONFIG_MSM_QDSP6_PDR
 QDSP6_PDR_OBJS += audio_pdr.o
+endif
+
+ifdef CONFIG_MSM_QDSP6_SSR
+QDSP6_SSR_OBJS += audio_ssr.o
 endif
 
 ifdef CONFIG_MSM_ULTRASOUND
@@ -177,6 +181,9 @@ q6_notifier_dlkm-y := $(QDSP6_NOTIFIER_OBJS)
 
 obj-$(CONFIG_MSM_QDSP6_PDR) += q6_pdr_dlkm.o
 q6_pdr_dlkm-y := $(QDSP6_PDR_OBJS)
+
+obj-$(CONFIG_MSM_QDSP6_SSR) += q6_ssr_dlkm.o
+q6_pdr_dlkm-y := $(QDSP6_SSR_OBJS)
 
 # inject some build related information
 DEFINES += -DBUILD_TIMESTAMP=\"$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')\"
