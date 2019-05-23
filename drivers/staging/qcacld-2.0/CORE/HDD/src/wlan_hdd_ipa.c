@@ -1907,7 +1907,7 @@ static void hdd_ipa_uc_op_cb(struct op_msg_type *op_msg, void *usr_ctxt)
 			ipa_stat.tx_ch_stats.num_db,
 			ipa_stat.tx_ch_stats.num_unexpected_db,
 			ipa_stat.tx_ch_stats.num_bam_int_handled,
-			ipa_stat.tx_ch_stats.num_bam_int_in_non_runnning_state,
+			ipa_stat.tx_ch_stats.num_bam_int_in_non_running_state,
 			ipa_stat.tx_ch_stats.num_qmb_int_handled);
 
 		VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
