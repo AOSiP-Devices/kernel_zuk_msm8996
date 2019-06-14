@@ -654,7 +654,7 @@ static int
 qpnp_flash_led_get_max_avail_current(struct flash_node_data *flash_node,
 					struct qpnp_flash_led *led)
 {
-	union power_supply_propval prop;
+	union power_supply_propval prop __maybe_unused;
 	int64_t chg_temp_milidegc, die_temp_degc;
 	int max_curr_avail_ma = 2000;
 	int allowed_die_temp_curr_ma = 2000;
@@ -685,6 +685,7 @@ qpnp_flash_led_get_max_avail_current(struct flash_node_data *flash_node,
 				FLASH_LED_CURRENT_READING_DELAY_MAX);
 		}
 
+#ifndef CONFIG_MACH_ZUK_MSM8996
 		power_supply_get_property(led->battery_psy,
 				POWER_SUPPLY_PROP_FLASH_CURRENT_MAX, &prop);
 		if (!prop.intval) {
@@ -694,6 +695,9 @@ qpnp_flash_led_get_max_avail_current(struct flash_node_data *flash_node,
 		}
 
 		max_curr_avail_ma = (prop.intval / FLASH_LED_UA_PER_MA);
+#else
+		max_curr_avail_ma = 1000;
+#endif
 	}
 
 	/*
