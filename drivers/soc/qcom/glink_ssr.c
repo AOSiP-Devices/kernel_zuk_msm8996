@@ -679,9 +679,14 @@ int notify_for_subsystem(struct subsys_info *ss_info)
 
 			notifications_successful = false;
 
+#ifndef CONFIG_MACH_ZUK_MSM8996
 			/* Check for RPM, as it can't be restarted */
 			if (!strcmp(ss_leaf_entry->ssr_name, "rpm"))
 				panic("%s: RPM failed to respond!\n", __func__);
+#else
+			if (!strcmp(ss_leaf_entry->ssr_name, "rpm"))
+				GLINK_SSR_ERR("%s: RPM failed to respond! RIP G-Link SSR\n", __func__);
+#endif
 		}
 		if (!IS_ERR_OR_NULL(ss_leaf_entry->cb_data))
 			ss_leaf_entry->cb_data->responded = false;
